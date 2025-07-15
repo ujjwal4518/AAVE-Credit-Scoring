@@ -17,31 +17,41 @@ ENV/
 env/
 
 # --------------------
-# VS Code settings (optional)
+# VS Code settings
 # --------------------
 .vscode/
 
 # --------------------
-# Jupyter notebook checkpoints (if any)
+# Jupyter notebook checkpoints
 # --------------------
 .ipynb_checkpoints
 
 # --------------------
-# Output directory
+# Output files
 # --------------------
 outputs/*
 !outputs/.gitkeep
+!outputs/scores.csv  # allow specific output
 
 # --------------------
-# Data directory (ignore large raw files)
+# Data files
 # --------------------
 data/*
 !data/.gitkeep
+!data/user_transactions.json  # allow specific input
 
 # --------------------
-# Log / temp / misc
+# Logs and temp files
 # --------------------
 *.log
 *.tmp
 *.DS_Store
 Thumbs.db
+
+# --------------------
+# Plot images (optional)
+# --------------------
+*.png
+*.jpg
+*.jpeg
+*.svg
