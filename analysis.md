@@ -1,76 +1,85 @@
-# 📊 Wallet Credit Score Analysis – Aave V2
+# 📊 Credit Score Analysis – Aave V2 Protocol
 
-This report provides an analysis of wallet credit scores computed based on transaction-level behavior on the Aave V2 protocol. The credit score ranges from **0 to 1000**, where higher scores represent responsible, consistent DeFi usage, and lower scores represent riskier, bot-like, or exploit-prone behavior.
+This document summarizes the credit scoring behavior of DeFi wallets interacting with the Aave V2 protocol, based on transaction history extracted from raw JSON data.
 
 ---
 
 ## 🔢 Score Distribution
 
-The wallets were binned into ranges of 100. Here's the distribution:
+Credit scores were calculated between **0 and 1000**, where:
+- Higher scores indicate consistent deposit-repay activity, no liquidations.
+- Lower scores reflect irregular usage, risk, or inactivity.
 
-| Score Range | Number of Wallets | % of Total |
-| ----------- | ----------------- | ---------- |
-| 0–100       | XXX               | XX%        |
-| 100–200     | XXX               | XX%        |
-| 200–300     | XXX               | XX%        |
-| 300–400     | XXX               | XX%        |
-| 400–500     | XXX               | XX%        |
-| 500–600     | XXX               | XX%        |
-| 600–700     | XXX               | XX%        |
-| 700–800     | XXX               | XX%        |
-| 800–900     | XXX               | XX%        |
-| 900–1000    | XXX               | XX%        |
+Based on the plot, the scores are heavily **right-skewed** toward low values.
 
-> _(Note: These numbers should be generated using a histogram from `scores.csv`.)_
+### 🧮 Observed Bucket Distribution (approx.)
 
----
+| Credit Score Range | # Wallets (Approx) | Interpretation |
+|--------------------|--------------------|----------------|
+| 0–100              | ~2600              | Mostly inactive, one-off or risky behavior |
+| 100–200            | ~100               | Single-action wallets (borrow or redeem only) |
+| 200–400            | ~600               | Active with some repayments, no liquidation |
+| 400–600            | ~120               | Balanced usage with moderate volume |
+| 600–800            | ~20                | Healthy activity, strong repayment |
+| 800–1000           | Very Few / 0       | No wallets reached top trust tier |
 
-## 🔍 Observed Wallet Behaviors by Score Range
-
-### 🔴 **Low Score Range (0–200):**
-
-- Frequent liquidation events
-- Borrowed large amounts with little or no repayment
-- Abrupt deposit-withdraw cycles (bot or exploit-like)
-- High `total_borrowed` – low `total_repaid`
-
-### 🟡 **Mid Score Range (400–600):**
-
-- Moderate participation in the protocol
-- Some repayments made, but not full
-- Activity patterns may be inconsistent (e.g., borrow-repay but no deposits)
-
-### 🟢 **High Score Range (800–1000):**
-
-- Consistent deposits and full repayments
-- Zero or minimal liquidation events
-- High volume users with responsible behavior
-- Long-term interaction with the protocol
+> 📌 *Actual bucket counts derived visually from the plotted histogram.*
 
 ---
 
-## 📈 Key Insights
+## ⚠️ Characteristics of Low-Scoring Wallets (0–200)
 
-- Wallets with **no liquidation** and **high repayment** behavior tend to cluster above 800.
-- A large proportion of wallets score between 400–700, representing average DeFi users.
-- Liquidation events are the strongest negative signal in the scoring model.
-- The model shows promise in detecting potential bot-like or risky behavior via transaction patterns.
-
----
-
-## 🔮 Future Improvements
-
-- Add timestamp-based features (e.g., average time between borrow and repay)
-- Include asset type or token-specific behavior
-- Incorporate cluster-based anomaly detection (unsupervised learning)
-- Consider time decay for older transactions
+- One-time interaction (e.g., only a deposit or borrow)
+- No repayment or poor behavior (liquidation present)
+- Very low financial volume
+- Potentially bots or test wallets
 
 ---
 
-## 📁 File Reference
+## ✅ Characteristics of High-Scoring Wallets (400+)
 
-- **Input**: `data/user_transactions.json`
-- **Output**: `outputs/scores.csv`
-- **Scoring Logic**: `src/scoring.py`
+- Multiple `deposit`, `repay`, `redeemunderlying` actions
+- No liquidation events
+- Balanced loan and repayment cycles
+- Engaged over longer timeframes
 
 ---
+
+## 📊 Score Distribution Plot
+
+![Credit Score Distribution](outputs/score_distribution.png)
+
+- **Left-skewed peak (~2600 wallets)** at 0–50 indicates minimal engagement.
+- A **smaller bump around 300–400** suggests a cluster of wallets with good behavior.
+- Virtually **no wallets beyond 800**, reflecting strict penalties (e.g., for liquidation) and tight thresholds.
+
+---
+
+## 🧠 Scoring Weights Summary
+
+| Feature             | Weight | Notes |
+|---------------------|--------|-------|
+| Total Deposited     | 30%    | Measures trust and capital commitment |
+| Total Repaid        | 20%    | Key signal of reliability |
+| Total Withdrawn     | 20%    | Shows completed interactions |
+| Total Borrowed      | 20%    | Penalized slightly |
+| Liquidation         | -30%   | Heavy penalty if triggered even once |
+
+Final score is normalized and scaled to a **0–1000** range.
+
+---
+
+## 📌 Conclusion
+
+The credit scoring algorithm effectively segments wallets by behavior. Majority of wallets are low scoring due to minimal or risky behavior, while only a small subset demonstrates well-rounded, trustable patterns suitable for DeFi lending.
+
+This system can help:
+- Flag risky borrowers
+- Rank wallets for credit delegation
+- Build trust layers for on-chain credit scoring
+
+---
+
+**Author:** Ujjwal Dwivedi  
+**Project:** Aave Credit Scoring ML Challenge  
+**Date:** July 2025
