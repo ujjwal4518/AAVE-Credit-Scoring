@@ -1,0 +1,47 @@
+# --------------------
+# Byte-compiled / cache files
+# --------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+
+# --------------------
+# Environment files
+# --------------------
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# --------------------
+# VS Code settings (optional)
+# --------------------
+.vscode/
+
+# --------------------
+# Jupyter notebook checkpoints (if any)
+# --------------------
+.ipynb_checkpoints
+
+# --------------------
+# Output directory
+# --------------------
+outputs/*
+!outputs/.gitkeep
+
+# --------------------
+# Data directory (ignore large raw files)
+# --------------------
+data/*
+!data/.gitkeep
+
+# --------------------
+# Log / temp / misc
+# --------------------
+*.log
+*.tmp
+*.DS_Store
+Thumbs.db
